@@ -1,0 +1,166 @@
+---
+output:
+  github_document:
+    html_preview: true
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "tools/readme/README-",
+  out.width = "100%"
+)
+```
+
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
+devtools::load_all()
+```
+
+**Work in progress, breaking changes possible**
+
+# mscgeometR
+
+R wrapper for querying the Meteorological Service of Canada's (MSC) [GeoMet webservices](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+
+Includes functionality for querying both the [GeoMet Web Coverage Service (WCS)](https://geo.weather.gc.ca/geomet?lang=en&service=WCS&version=2.0.1&request=GetCapabilities)
+as well as the [OGC OpenAPI endpoint](https://api.weather.gc.ca/openapi). 
+
+For more information on both services, please see the 
+[official documentation](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+
+## Installation
+`mscgeometR` is not available on CRAN, you can install it from GitHub using `remotes`
+
+```{r eval=FALSE}
+remotes::install_github("rywhale/mscgeometR")
+```
+
+## WCS Data
+Queries to the WCS endpoint require you to know the coverage ID of the layer
+you're after. You can get a full list of these IDs with `geomet_wcs_capabilities()`
+
+Once you have the coverage ID, you can query data like so
+
+```{r wcs}
+library(raster)
+
+# Downloads to temporary file
+rdpa_file <- geomet_wcs_data(
+  # Regional Deterministic Precipitation Analysis
+  coverage_id = "RDPA.24F_PR",
+  # Set query parameters
+  query = list(
+    "SUBSETTINGCRS" = "EPSG:4326",
+    "OUTPUTCRS" = "EPSG:4326",
+    # Res
+    "RESOLUTION" = "x(0.09)",
+    "RESOLUTION" = "y(0.09)",
+    # Bounding box
+    "SUBSET" = "x(-96.3553, -89.8336)",
+    "SUBSET" = "y(47.3633, 52.0529)",
+    "TIME" = paste0(Sys.Date() - 1, "T12:00:00Z")
+  )
+)
+
+rdpa_rast <- raster(rdpa_file)
+raster::crs(rdpa_rast) <- raster::crs("EPSG:4326")
+
+plot(rdpa_rast)
+```
+
+Setting the query parameters above requires some familiarity with the product
+specification (e.g. resolution). Generally, specifying no "TIME" in the query
+will lead to the most recent product being returned. 
+
+## OGC API Data
+You can get a full list of the collections available with
+
+```{r api_col}
+geomet_api_collections()
+```
+
+The `collection_id` values in the above table can then be used to list potential
+query parameters for each collection, e.g. for hydrometric stations
+
+```{r api_queryables}
+geomet_api_queryables("hydrometric-stations")
+```
+
+Note that boolean variables should be quoted, e.g. `FALSE` -> `"false"`
+
+### Adjusted Homogenized Canadian Climate Data (AHCCD)
+```{r ahccd}
+# View available stations
+head(geomet_ahccd_stns())
+
+# Example query
+geomet_ahccd_data(station_number = "3011120", period = "year")
+```
+
+### Climate Station Data
+```{r climate}
+# View available stations
+geomet_clim_stns()
+
+# Example query
+geomet_clim_means(
+  station_number = "1126070",
+  start_date = "2016-01-01",
+  end_date = "2016-01-02"
+)
+
+# Normals
+geomet_clim_normals(station_number = "1126070")
+```
+
+### Hydrometric Station Data
+```{r hydro}
+# View available Ontario stations
+geomet_hydro_stns(
+  query = list("PROV_TERR_STATE_LOC" = "ON")
+  )
+
+# Example means query
+geomet_hydro_means(
+  station_number = "04HA001",
+  start_date = "2016-01-01",
+  end_date = "2016-01-02"
+)
+
+# Real time query
+geomet_hydro_realtime(station_number = "04HA001")
+```
+
+### Long Term Climate Extremes (LTCE)
+```{r ltce}
+# View available stations
+geomet_ltce_stns(
+  query = list(
+    "PROVINCE_CODE" = "ON"
+  )
+)
+
+# Example query
+geomet_ltce_data(
+  station_number = "VSON99V",
+  param = "temp"
+)
+```
+
+### Surface Weather Observations (SWOB)
+```{r swob}
+geomet_swob_realtime(
+  station_number = "1192948",
+  start_date = Sys.Date() - 1,
+  end_date = Sys.Date(),
+  query = list(
+    "_is-minutely_obs-value" = "false"
+  )
+)
+```
+
+## Contributing
+If you see data sets missing or come across any problems, please submit an issue
