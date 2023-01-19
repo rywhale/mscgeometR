@@ -25,7 +25,7 @@ geomet_ahccd_stns <- function(query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_ahccd_data
@@ -84,5 +84,5 @@ geomet_ahccd_data <- function(station_number, period = "month", query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }

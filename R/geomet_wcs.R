@@ -8,7 +8,6 @@
 #' repeating large queries.
 #' @return `httr` response or path to file if `save_to_disk`
 #' @keywords internal
-#' @noRd
 #'
 geomet_wcs_query <- function(query, end_point = "geomet", save_to_disk = FALSE){
 
@@ -136,8 +135,8 @@ geomet_wcs_bands <- function(coverage_id, end_point = "geomet"){
 #' geomet_wcs_data
 #'
 #' @description Performs query for specified product and query parameters. Saves
-#'   output to temporary file and provides file path. Note that temporary files are
-#'   deleted when the current R session ends.
+#'   output to temporary GeoTIFF file and returns file path.
+#'   Note that temporary files are deleted when the current R session ends.
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param query List of parameters to pass to query, see
 #' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}

@@ -18,6 +18,10 @@ Get virtual climate station metadata for
 Long Term Climate Extremes (LTCE)
 }
 \examples{
-geomet_ltce_stns()
+geomet_ltce_stns(
+  query = list(
+    "PROVINCE_CODE" = "ON"
+  )
+)
 
 }

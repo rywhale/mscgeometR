@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 devtools::load_all()
 ```
 
-**Work in progress, breaking changes possible**
+**Work in progress, contributions/input welcome**
 
 # mscgeometR
 
@@ -42,12 +42,16 @@ remotes::install_github("rywhale/mscgeometR")
 Queries to the WCS endpoint require you to know the coverage ID of the layer
 you're after. You can get a full list of these IDs with `geomet_wcs_capabilities()`
 
+Setting the query parameters requires some familiarity with the product
+specification (e.g. resolution). Generally, specifying no "TIME" in the query
+will lead to the most recent product being returned. 
+
 Once you have the coverage ID, you can query data like so
 
 ```{r wcs}
 library(raster)
 
-# Downloads to temporary file
+# Downloads to temporary .tif file
 rdpa_file <- geomet_wcs_data(
   # Regional Deterministic Precipitation Analysis
   coverage_id = "RDPA.24F_PR",
@@ -71,9 +75,8 @@ raster::crs(rdpa_rast) <- raster::crs("EPSG:4326")
 plot(rdpa_rast)
 ```
 
-Setting the query parameters above requires some familiarity with the product
-specification (e.g. resolution). Generally, specifying no "TIME" in the query
-will lead to the most recent product being returned. 
+`geomet_wcs_data()` downloads the query result to a GeoTIFF file in a temporary
+directory. Restarting your R session will clear these temporary files. 
 
 ## OGC API Data
 You can get a full list of the collections available with
@@ -97,70 +100,100 @@ Note that boolean variables should be quoted, e.g. `FALSE` -> `"false"`
 head(geomet_ahccd_stns())
 
 # Example query
-geomet_ahccd_data(station_number = "3011120", period = "year")
+ahccd_dat <- geomet_ahccd_data(
+  station_number = "3011120", 
+  period = "year"
+  )
+
+head(ahccd_dat)
 ```
 
 ### Climate Station Data
 ```{r climate}
 # View available stations
-geomet_clim_stns()
+clim_stns <- geomet_clim_stns()
+
+# Lots of columns, here are the first few
+head(clim_stns[, 1:5])
 
 # Example query
-geomet_clim_means(
+clim_data <- geomet_clim_means(
   station_number = "1126070",
   start_date = "2016-01-01",
   end_date = "2016-01-02"
 )
 
+head(clim_data)
+
 # Normals
-geomet_clim_normals(station_number = "1126070")
+clim_normals <- geomet_clim_normals(station_number = "1126070")
+
+head(clim_normals)
 ```
 
 ### Hydrometric Station Data
 ```{r hydro}
 # View available Ontario stations
-geomet_hydro_stns(
-  query = list("PROV_TERR_STATE_LOC" = "ON")
+hydro_stns <- geomet_hydro_stns(
+  query = list(
+    "PROV_TERR_STATE_LOC" = "ON"
+    )
   )
 
+head(hydro_stns)
+
 # Example means query
-geomet_hydro_means(
+hydro_dat <- geomet_hydro_means(
   station_number = "04HA001",
   start_date = "2016-01-01",
   end_date = "2016-01-02"
 )
 
+head(hydro_dat)
+
 # Real time query
-geomet_hydro_realtime(station_number = "04HA001")
+hydro_rt <- geomet_hydro_realtime(station_number = "04HA001")
+
+head(hydro_rt)
 ```
 
 ### Long Term Climate Extremes (LTCE)
 ```{r ltce}
-# View available stations
-geomet_ltce_stns(
+# View available stations in Ontario
+ltce_stns <- geomet_ltce_stns(
   query = list(
     "PROVINCE_CODE" = "ON"
   )
 )
 
+head(ltce_stns)
+
 # Example query
-geomet_ltce_data(
+ltce_dat <- geomet_ltce_data(
   station_number = "VSON99V",
   param = "temp"
 )
+
+# Lots of columns, here are the first few
+head(ltce_dat[, 1:5])
 ```
 
 ### Surface Weather Observations (SWOB)
 ```{r swob}
-geomet_swob_realtime(
+swob_dat <- geomet_swob_realtime(
   station_number = "1192948",
-  start_date = Sys.Date() - 1,
+  start_date = Sys.Date(),
   end_date = Sys.Date(),
   query = list(
     "_is-minutely_obs-value" = "false"
   )
 )
+
+# Lots of columns, here are the first few
+head(swob_dat[, 1:5])
 ```
 
 ## Contributing
-If you see data sets missing or come across any problems, please submit an issue
+If you see data sets missing or come across any problems, please [submit an issue](https://github.com/rywhale/mscgeometR/issues).
+
+See [here](https://github.com/rywhale/mscgeometR/blob/main/.github/CONTRIBUTING.md) for general contribution guidelines. 

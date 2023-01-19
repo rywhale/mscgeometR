@@ -29,8 +29,11 @@ Get real-time surface weather observations (SWOB)
 \examples{
 geomet_swob_realtime(
   station_number = "1192948",
-  start_date = Sys.Date() - 2,
-  end_date = Sys.Date()
+  start_date = Sys.Date(),
+  end_date = Sys.Date(),
+  query = list(
+    "_is-minutely_obs-value" = "false"
+  )
 )
 
 }

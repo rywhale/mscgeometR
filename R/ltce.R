@@ -7,7 +7,11 @@
 #' @return \code{tibble} containing LTCE station metadata
 #' @export
 #' @examples
-#' geomet_ltce_stns()
+#' geomet_ltce_stns(
+#'   query = list(
+#'     "PROVINCE_CODE" = "ON"
+#'   )
+#' )
 #'
 geomet_ltce_stns <- function(query) {
   query_path <- "collections/ltce-stations/items"
@@ -25,7 +29,7 @@ geomet_ltce_stns <- function(query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_ltce_data
@@ -87,5 +91,5 @@ geomet_ltce_data <- function(station_number, param, query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }

@@ -19,6 +19,6 @@ Path to temporary file with results
 }
 \description{
 Performs query for specified product and query parameters. Saves
-  output to temporary file and provides file path. Note that temporary files are
-  deleted when the current R session ends.
+  output to temporary GeoTIFF file and returns file path.
+  Note that temporary files are deleted when the current R session ends.
 }

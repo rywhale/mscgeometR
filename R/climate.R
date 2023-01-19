@@ -24,7 +24,7 @@ geomet_clim_stns <- function(query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_clim_normals
@@ -60,7 +60,7 @@ geomet_clim_normals <- function(station_number, query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_clim_means
@@ -141,7 +141,7 @@ geomet_clim_means <- function(station_number, start_date, end_date,
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_swob_realtime
@@ -161,8 +161,11 @@ geomet_clim_means <- function(station_number, start_date, end_date,
 #' @examples
 #' geomet_swob_realtime(
 #'   station_number = "1192948",
-#'   start_date = Sys.Date() - 2,
-#'   end_date = Sys.Date()
+#'   start_date = Sys.Date(),
+#'   end_date = Sys.Date(),
+#'   query = list(
+#'     "_is-minutely_obs-value" = "false"
+#'   )
 #' )
 #'
 geomet_swob_realtime <- function(station_number, start_date, end_date, query) {
@@ -205,5 +208,5 @@ geomet_swob_realtime <- function(station_number, start_date, end_date, query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }

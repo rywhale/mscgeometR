@@ -17,6 +17,10 @@ See \code{geomet_api_queryables("hydrometric-stations")}}
 Lists hydrometric stations available for query
 }
 \examples{
-geomet_hydro_stns()
+geomet_hydro_stns(
+  query = list(
+    "PROV_TERR_STATE_LOC" = "ON"
+  )
+)
 
 }

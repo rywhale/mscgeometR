@@ -5,7 +5,6 @@
 #' @param query List of parameters to be passed to query
 #' @return \code{geomet_api_resp} object
 #' @keywords internal
-#' @noRd
 #'
 geomet_api_query <- function(endpoint = "https://api.weather.gc.ca/",
                              path, query = list()) {
@@ -61,7 +60,6 @@ geomet_api_query <- function(endpoint = "https://api.weather.gc.ca/",
 #' @param req \code{geomet_api_resp} object
 #' @return \code{tibble} containing all paged results
 #' @keywords internal
-#' @noRd
 #'
 geomet_api_paginate <- function(req, geometry = TRUE) {
   parsed_req <- req$content$features
@@ -137,7 +135,8 @@ geomet_api_queryables <- function(collection){
   purrr::map_df(
     parsed_req,
     ~{
-      dplyr::tibble(queryable = .x$title, type = .x$type)
+      # dplyr::tibble(queryable = .x$title, type = .x$type)
+      dplyr::tibble(queryable = .x[["title"]], type = .x[["type"]])
     }
   )
 

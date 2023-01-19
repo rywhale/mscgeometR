@@ -6,7 +6,11 @@
 #' @return \code{tibble} containing hydrometric station information
 #' @export
 #' @examples
-#' geomet_hydro_stns()
+#' geomet_hydro_stns(
+#'   query = list(
+#'     "PROV_TERR_STATE_LOC" = "ON"
+#'   )
+#' )
 #'
 geomet_hydro_stns <- function(query) {
   query_path <- "collections/hydrometric-stations/items"
@@ -21,7 +25,7 @@ geomet_hydro_stns <- function(query) {
   # Check for/handle pagination
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -c(links, type))
+  dplyr::select(parsed_req, -c("links", "type"))
 }
 
 #' geomet_hydro_means
@@ -99,7 +103,7 @@ geomet_hydro_means <- function(station_number, start_date, end_date,
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_hydro_annuals
@@ -175,7 +179,7 @@ geomet_hydro_annuals <- function(station_number, start_date, end_date,
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_hydro_realtime
@@ -221,5 +225,5 @@ geomet_hydro_realtime <- function(station_number, query) {
 
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -type)
+  dplyr::select(parsed_req, -"type")
 }
