@@ -77,6 +77,7 @@ geomet_wcs_query <- function(query, end_point = "geomet", save_to_disk = FALSE){
 #' @description Queries list of available products on GeoMet WCS
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' @return Vector of product identifiers
+#' @export
 #'
 geomet_wcs_capabilities <- function(end_point = "geomet"){
 
@@ -112,6 +113,7 @@ geomet_wcs_capabilities <- function(end_point = "geomet"){
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' @return List of available bands for product
+#' @export
 #'
 geomet_wcs_bands <- function(coverage_id, end_point = "geomet"){
 
@@ -142,6 +144,7 @@ geomet_wcs_bands <- function(coverage_id, end_point = "geomet"){
 #' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' @return Path to temporary file with results
+#' @export
 #'
 geomet_wcs_data <- function(coverage_id, query, end_point = "geomet"){
 
