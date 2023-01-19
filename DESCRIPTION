@@ -1,11 +1,11 @@
 Package: mscgeometR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: R Wrapper for Querying the Meteorological Service of Canada’s (MSC) 'GeoMet' webservices
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(person("Ryan", "Whaley", role = c("aut", "cre"), email = "rdgwhaley@gmail.com"))
+Description: R wrapper for querying the Meteorological Service of Canada’s (MSC) GeoMet webservices. Includes functionality for querying both 
+  the GeoMet Web Coverage Service (WCS) as well as the OGC OpenAPI endpoint.
+  For more information on both services, please see the official documentation (<https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
