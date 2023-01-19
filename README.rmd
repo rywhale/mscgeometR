@@ -23,6 +23,11 @@ devtools::load_all()
 
 # mscgeometR
 
+<!-- badges: start -->
+  [![check-standard](https://github.com/rywhale/mscgeometR/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/rywhale/mscgeometR/actions/workflows/check-standard.yaml)
+  [![LICENSE](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  <!-- badges: end -->
+
 R wrapper for querying the Meteorological Service of Canada's (MSC) [GeoMet webservices](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
 
 Includes functionality for querying both the [GeoMet Web Coverage Service (WCS)](https://geo.weather.gc.ca/geomet?lang=en&service=WCS&version=2.0.1&request=GetCapabilities)

@@ -5,6 +5,12 @@
 
 # mscgeometR
 
+<!-- badges: start -->
+
+[![check-standard](https://github.com/rywhale/mscgeometR/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/rywhale/mscgeometR/actions/workflows/check-standard.yaml)
+[![LICENSE](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
 R wrapper for querying the Meteorological Service of Canada’s (MSC)
 [GeoMet
 webservices](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
@@ -125,33 +131,33 @@ Note that boolean variables should be quoted, e.g. `FALSE` -> `"false"`
 # View available stations
 head(geomet_ahccd_stns())
 #>   identifier__identifiant station_id__id_station station_name__nom_station
-#> 1                 1123993                1123993       KELOWNA QUAILS GATE
-#> 2                 1114627                1114627      LILLOOET SETON BCHPA
-#> 3                 1164730                1164730          LUMBY SIGALET RD
-#> 4                 1114745                1114745                    LYTTON
-#> 5                 1054920                1054920            MASSET AIRPORT
-#> 6                 10253G0                10253G0         NANAIMO CITY YARD
+#> 1                 2403053                2403053             PANGNIRTUNG A
+#> 2                 2403201                2403201              POND INLET A
+#> 3                 2403450                2403450                 REA POINT
+#> 4                 2403490                2403490             REPULSE BAY A
+#> 5                 2403625                2403625             ROWLEY ISLAND
+#> 6                 2403854                2403854                TALOYOAK A
 #>   measurement_type__type_mesure period__periode trend_value__valeur_tendance
-#> 1                          snow             Ann                           NA
-#> 2                          snow             Ann                           NA
-#> 3                          snow             Ann                           NA
-#> 4                          snow             Ann                           NA
-#> 5                          snow             Ann                           NA
-#> 6                          snow             Ann                           NA
+#> 1            pressure_sea_level             Ann                           NA
+#> 2            pressure_sea_level             Ann                           NA
+#> 3            pressure_sea_level             Ann                           NA
+#> 4            pressure_sea_level             Ann                           NA
+#> 5            pressure_sea_level             Ann                           NA
+#> 6            pressure_sea_level             Ann                           NA
 #>   elevation__elevation province__province joined__rejoint year_range__annees
-#> 1                  417                 BC               1               <NA>
-#> 2                  198                 BC               1               <NA>
-#> 3                  560                 BC               1               <NA>
-#> 4                  174                 BC               1               <NA>
-#> 5                    7                 BC               1               <NA>
-#> 6                  114                 BC               1               <NA>
-#>   start_date__date_debut end_date__date_fin        coordinates
-#> 1             2014-04-01         2014-04-01 -119.5728, 49.8422
-#> 2             2001-04-01         2001-04-01 -121.9242, 50.6733
-#> 3             1999-02-01         1999-02-01 -118.7667, 50.3667
-#> 4             2015-06-01         2015-06-01 -121.6078, 50.2569
-#> 5             2008-06-01         2008-06-01 -132.1175, 54.0226
-#> 6             2017-12-01         2017-12-01 -123.9878, 49.1989
+#> 1                 22.6                 NU               1               <NA>
+#> 2                 55.2                 NU               1               <NA>
+#> 3                 15.0                 NU               0               <NA>
+#> 4                 24.4                 NU               1               <NA>
+#> 5                 41.0                 NU               0               <NA>
+#> 6                 28.0                 NU               0               <NA>
+#>   start_date__date_debut end_date__date_fin    coordinates
+#> 1             2014-12-01         2014-12-01  -65.70, 66.13
+#> 2             2014-09-01         2014-09-01  -77.98, 72.68
+#> 3             2014-12-01         2014-12-01 -105.72, 75.38
+#> 4             2014-12-01         2014-12-01  -86.22, 66.52
+#> 5             2009-06-01         2009-06-01  -79.03, 69.08
+#> 6             2014-12-01         2014-12-01  -93.58, 69.55
 
 # Example query
 ahccd_dat <- geomet_ahccd_data(
@@ -161,12 +167,12 @@ ahccd_dat <- geomet_ahccd_data(
 
 head(ahccd_dat)
 #>   lat__lat lon__long identifier__identifiant station_id__id_station
-#> 1     53.2    -113.8            3011120.2002                3011120
-#> 2     53.2    -113.8            3011120.2001                3011120
-#> 3     53.2    -113.8            3011120.1942                3011120
-#> 4     53.2    -113.8            3011120.1956                3011120
-#> 5     53.2    -113.8            3011120.1917                3011120
-#> 6     53.2    -113.8            3011120.1933                3011120
+#> 1     53.2    -113.8            3011120.1936                3011120
+#> 2     53.2    -113.8            3011120.1975                3011120
+#> 3     53.2    -113.8            3011120.1982                3011120
+#> 4     53.2    -113.8            3011120.1928                3011120
+#> 5     53.2    -113.8            3011120.1918                3011120
+#> 6     53.2    -113.8            3011120.1985                3011120
 #>   period_group__groupe_periode period_value__valeur_periode province__province
 #> 1                       Annual                          Ann                 AB
 #> 2                       Annual                          Ann                 AB
@@ -175,40 +181,40 @@ head(ahccd_dat)
 #> 5                       Annual                          Ann                 AB
 #> 6                       Annual                          Ann                 AB
 #>   year__annee temp_mean__temp_moyenne temp_mean_units__temp_moyenne_unites
-#> 1        2002                     3.1                                    C
-#> 2        2001                 -9999.9                                    C
-#> 3        1942                     2.5                                    C
-#> 4        1956                     1.6                                    C
-#> 5        1917                 -9999.9                                    C
-#> 6        1933                     0.6                                    C
+#> 1        1936                     0.7                                    C
+#> 2        1975                     1.8                                    C
+#> 3        1982                     0.9                                    C
+#> 4        1928                     3.5                                    C
+#> 5        1918                 -9999.9                                    C
+#> 6        1985                     2.6                                    C
 #>   temp_min__temp_min temp_min_units__temp_min_unites temp_max__temp_max
-#> 1               -3.5                               C                9.6
-#> 2            -9999.9                               C            -9999.9
-#> 3               -4.6                               C                9.5
-#> 4               -4.8                               C                8.1
+#> 1               -6.1                               C                7.6
+#> 2               -4.6                               C                8.2
+#> 3               -5.6                               C                7.3
+#> 4               -3.9                               C               10.8
 #> 5            -9999.9                               C            -9999.9
-#> 6               -6.2                               C                7.4
+#> 6               -3.7                               C                9.0
 #>   temp_max_units__temp_max_unites total_precip__precip_totale
-#> 1                               C                       388.2
-#> 2                               C                     -9999.9
-#> 3                               C                       719.6
-#> 4                               C                       544.8
+#> 1                               C                       488.1
+#> 2                               C                       503.6
+#> 3                               C                       624.9
+#> 4                               C                     -9999.9
 #> 5                               C                     -9999.9
-#> 6                               C                       621.1
+#> 6                               C                       449.3
 #>   total_precip_units__precip_totale_unites rain__pluie rain_units__pluie_unites
-#> 1                                       mm       194.5                       mm
-#> 2                                       mm     -9999.9                       mm
-#> 3                                       mm       494.1                       mm
-#> 4                                       mm       388.0                       mm
+#> 1                                       mm       291.8                       mm
+#> 2                                       mm       374.4                       mm
+#> 3                                       mm       402.8                       mm
+#> 4                                       mm     -9999.9                       mm
 #> 5                                       mm     -9999.9                       mm
-#> 6                                       mm       421.9                       mm
+#> 6                                       mm       348.9                       mm
 #>   snow__neige snow_units__neige_unites pressure_sea_level__pression_niveau_mer
-#> 1       193.7                       mm                                      NA
-#> 2     -9999.9                       mm                                      NA
-#> 3       225.5                       mm                                      NA
-#> 4       156.8                       mm                                      NA
+#> 1       196.3                       mm                                      NA
+#> 2       129.2                       mm                                      NA
+#> 3       222.2                       mm                                      NA
+#> 4     -9999.9                       mm                                      NA
 #> 5     -9999.9                       mm                                      NA
-#> 6       199.2                       mm                                      NA
+#> 6       100.3                       mm                                      NA
 #>   pressure_sea_level_units__pression_niveau_mer_unite
 #> 1                                                 hPa
 #> 2                                                 hPa
@@ -416,26 +422,26 @@ hydro_rt <- geomet_hydro_realtime(station_number = "04HA001")
 
 head(hydro_rt)
 #>                    IDENTIFIER STATION_NUMBER                 STATION_NAME
-#> 1 04HA001.2022-12-21.00:45:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
-#> 2 04HA001.2022-12-21.00:50:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
-#> 3 04HA001.2022-12-21.00:55:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
-#> 4 04HA001.2022-12-21.01:00:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
-#> 5 04HA001.2022-12-21.01:05:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
-#> 6 04HA001.2022-12-21.01:10:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 1 04HA001.2022-12-20.05:00:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 2 04HA001.2022-12-20.05:05:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 3 04HA001.2022-12-20.05:10:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 4 04HA001.2022-12-20.05:15:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 5 04HA001.2022-12-20.05:20:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
+#> 6 04HA001.2022-12-20.05:25:00        04HA001 ALBANY RIVER NEAR HAT ISLAND
 #>   PROV_TERR_STATE_LOC            DATETIME              DATETIME_LST LEVEL
-#> 1                  ON 2022-12-21T00:45:00 2022-12-20T19:45:00-05:00 2.978
-#> 2                  ON 2022-12-21T00:50:00 2022-12-20T19:50:00-05:00 2.978
-#> 3                  ON 2022-12-21T00:55:00 2022-12-20T19:55:00-05:00 2.978
-#> 4                  ON 2022-12-21T01:00:00 2022-12-20T20:00:00-05:00 2.978
-#> 5                  ON 2022-12-21T01:05:00 2022-12-20T20:05:00-05:00 2.978
-#> 6                  ON 2022-12-21T01:10:00 2022-12-20T20:10:00-05:00 2.979
+#> 1                  ON 2022-12-20T05:00:00 2022-12-20T00:00:00-05:00 2.986
+#> 2                  ON 2022-12-20T05:05:00 2022-12-20T00:05:00-05:00 2.986
+#> 3                  ON 2022-12-20T05:10:00 2022-12-20T00:10:00-05:00 2.985
+#> 4                  ON 2022-12-20T05:15:00 2022-12-20T00:15:00-05:00 2.986
+#> 5                  ON 2022-12-20T05:20:00 2022-12-20T00:20:00-05:00 2.986
+#> 6                  ON 2022-12-20T05:25:00 2022-12-20T00:25:00-05:00 2.986
 #>   DISCHARGE LEVEL_SYMBOL_EN LEVEL_SYMBOL_FR DISCHARGE_SYMBOL_EN
-#> 1      1110              NA              NA                  NA
-#> 2      1110              NA              NA                  NA
-#> 3      1110              NA              NA                  NA
-#> 4      1110              NA              NA                  NA
-#> 5      1110              NA              NA                  NA
-#> 6      1110              NA              NA                  NA
+#> 1      1120              NA              NA                  NA
+#> 2      1120              NA              NA                  NA
+#> 3      1120              NA              NA                  NA
+#> 4      1120              NA              NA                  NA
+#> 5      1120              NA              NA                  NA
+#> 6      1120              NA              NA                  NA
 #>   DISCHARGE_SYMBOL_FR         coordinates
 #> 1                  NA -83.83333, 51.33056
 #> 2                  NA -83.83333, 51.33056
@@ -545,26 +551,26 @@ head(swob_dat[, 1:5])
 #> 5 msc-observation-atmospheric-surface_weather-ca-1.1-ascii
 #> 6 msc-observation-atmospheric-surface_weather-ca-1.1-ascii
 #>                                   id
-#> 1 2023-01-19-0200-CVFN-AUTO-swob.xml
-#> 2 2023-01-19-0300-CVFN-AUTO-swob.xml
-#> 3 2023-01-19-0000-CVFN-AUTO-swob.xml
-#> 4 2023-01-19-0100-CVFN-AUTO-swob.xml
-#> 5 2023-01-19-0400-CVFN-AUTO-swob.xml
-#> 6 2023-01-19-1100-CVFN-AUTO-swob.xml
+#> 1 2023-01-19-0000-CVFN-AUTO-swob.xml
+#> 2 2023-01-19-0200-CVFN-AUTO-swob.xml
+#> 3 2023-01-19-0500-CVFN-AUTO-swob.xml
+#> 4 2023-01-19-0300-CVFN-AUTO-swob.xml
+#> 5 2023-01-19-0100-CVFN-AUTO-swob.xml
+#> 6 2023-01-19-0400-CVFN-AUTO-swob.xml
 #>                                                                                               url
-#> 1 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0200-CVFN-AUTO-swob.xml
-#> 2 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0300-CVFN-AUTO-swob.xml
-#> 3 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0000-CVFN-AUTO-swob.xml
-#> 4 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0100-CVFN-AUTO-swob.xml
-#> 5 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0400-CVFN-AUTO-swob.xml
-#> 6 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-1100-CVFN-AUTO-swob.xml
+#> 1 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0000-CVFN-AUTO-swob.xml
+#> 2 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0200-CVFN-AUTO-swob.xml
+#> 3 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0500-CVFN-AUTO-swob.xml
+#> 4 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0300-CVFN-AUTO-swob.xml
+#> 5 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0100-CVFN-AUTO-swob.xml
+#> 6 https://dd.weather.gc.ca//observations/swob-ml/20230119/CVFN/2023-01-19-0400-CVFN-AUTO-swob.xml
 #>   date_tm-uom            date_tm-value
-#> 1    datetime 2023-01-19T02:00:00.000Z
-#> 2    datetime 2023-01-19T03:00:00.000Z
-#> 3    datetime 2023-01-19T00:00:00.000Z
-#> 4    datetime 2023-01-19T01:00:00.000Z
-#> 5    datetime 2023-01-19T04:00:00.000Z
-#> 6    datetime 2023-01-19T11:00:00.000Z
+#> 1    datetime 2023-01-19T00:00:00.000Z
+#> 2    datetime 2023-01-19T02:00:00.000Z
+#> 3    datetime 2023-01-19T05:00:00.000Z
+#> 4    datetime 2023-01-19T03:00:00.000Z
+#> 5    datetime 2023-01-19T01:00:00.000Z
+#> 6    datetime 2023-01-19T04:00:00.000Z
 ```
 
 ## Contributing
