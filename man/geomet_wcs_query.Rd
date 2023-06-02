@@ -4,10 +4,20 @@
 \alias{geomet_wcs_query}
 \title{Query ECCC GeoMet Web Coverage Service (WCS)}
 \usage{
-geomet_wcs_query(query, end_point = "geomet", save_to_disk = FALSE)
+geomet_wcs_query(
+  query,
+  username = "",
+  password = "",
+  end_point = "geomet",
+  save_to_disk = FALSE
+)
 }
 \arguments{
 \item{query}{List of query parameters}
+
+\item{username}{(Optional) Username for layers requiring authentication}
+
+\item{password}{(Optional) Password for layers requiring authentication}
 
 \item{end_point}{Either 'geomet' for weather products or 'geomet-climate'
 for climate products}

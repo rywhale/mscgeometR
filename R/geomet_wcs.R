@@ -3,13 +3,16 @@
 #' @param query List of query parameters
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' for climate products
+#' @param username (Optional) Username for layers requiring authentication
+#' @param password (Optional) Password for layers requiring authentication
 #' @param save_to_disk TRUE or FALSE, whether to write results to temporary file
 #' instead of returning response object. This can be useful for avoiding
 #' repeating large queries.
 #' @return `httr` response or path to file if `save_to_disk`
 #' @keywords internal
 #'
-geomet_wcs_query <- function(query, end_point = "geomet", save_to_disk = FALSE){
+geomet_wcs_query <- function(query, username = "", password = "",
+                             end_point = "geomet", save_to_disk = FALSE){
 
   if(!end_point %in% c("geomet", "geomet-climate")){
     stop("end_point must be 'geomet' or 'geomet-climate'")
@@ -53,7 +56,8 @@ geomet_wcs_query <- function(query, end_point = "geomet", save_to_disk = FALSE){
     httr::GET(
       url = base_url,
       query = query,
-      httr::write_disk(temp_path)
+      httr::write_disk(temp_path),
+      httr::authenticate(username, password)
     )
 
     return(temp_path)
@@ -61,7 +65,8 @@ geomet_wcs_query <- function(query, end_point = "geomet", save_to_disk = FALSE){
 
   res <- httr::GET(
     url = base_url,
-    query = query
+    query = query,
+    httr::authenticate(username, password)
   )
 
   if(httr::status_code(res) != 200){
@@ -111,17 +116,21 @@ geomet_wcs_capabilities <- function(end_point = "geomet"){
 #' @description Gets list of bands for specified product. This is especially useful
 #'   for 'geomet-climate' products where bands are used for time periods
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
+#' @param username (Optional) Username for layers requiring authentication
+#' @param password (Optional) Password for layers requiring authentication
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' @return List of available bands for product
 #' @export
 #'
-geomet_wcs_bands <- function(coverage_id, end_point = "geomet"){
+geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geomet"){
 
   desc <- geomet_wcs_query(
     query = list(
       "request" = "DescribeCoverage",
       "COVERAGEID" = coverage_id
     ),
+    username = username,
+    password = password,
     end_point = end_point
   )
 
@@ -142,11 +151,15 @@ geomet_wcs_bands <- function(coverage_id, end_point = "geomet"){
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param query List of parameters to pass to query, see
 #' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}
+#' @param username (Optional) Username for layers requiring authentication
+#' @param password (Optional) Password for layers requiring authentication
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
 #' @return Path to temporary file with results
 #' @export
 #'
-geomet_wcs_data <- function(coverage_id, query, end_point = "geomet"){
+geomet_wcs_data <- function(coverage_id, query,
+                            username = "", password = "",
+                            end_point = "geomet"){
 
   if(missing(query)){
     warning("Querying without setting `query` parameters can lead to unexpected results.")
@@ -159,7 +172,9 @@ geomet_wcs_data <- function(coverage_id, query, end_point = "geomet"){
 
   res <- geomet_wcs_query(
     query = query,
-    end_point,
+    username = username,
+    password = password,
+    end_point = end_point,
     save_to_disk = TRUE
   )
 

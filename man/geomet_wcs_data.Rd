@@ -4,13 +4,23 @@
 \alias{geomet_wcs_data}
 \title{geomet_wcs_data}
 \usage{
-geomet_wcs_data(coverage_id, query, end_point = "geomet")
+geomet_wcs_data(
+  coverage_id,
+  query,
+  username = "",
+  password = "",
+  end_point = "geomet"
+)
 }
 \arguments{
 \item{coverage_id}{Product identifier, see `geomet_wcs_capabilities`}
 
 \item{query}{List of parameters to pass to query, see
 \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}}
+
+\item{username}{(Optional) Username for layers requiring authentication}
+
+\item{password}{(Optional) Password for layers requiring authentication}
 
 \item{end_point}{Either 'geomet' for weather products or 'geomet-climate'}
 }

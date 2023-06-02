@@ -4,10 +4,14 @@
 \alias{geomet_wcs_bands}
 \title{geomet_wcs_bands}
 \usage{
-geomet_wcs_bands(coverage_id, end_point = "geomet")
+geomet_wcs_bands(coverage_id, username, password, end_point = "geomet")
 }
 \arguments{
 \item{coverage_id}{Product identifier, see `geomet_wcs_capabilities`}
+
+\item{username}{(Optional) Username for layers requiring authentication}
+
+\item{password}{(Optional) Password for layers requiring authentication}
 
 \item{end_point}{Either 'geomet' for weather products or 'geomet-climate'}
 }
