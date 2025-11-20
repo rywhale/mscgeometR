@@ -46,7 +46,6 @@ geomet_wcs_query <- function(query, username = "", password = "",
     httr2::req_auth_basic(username, password)
 
   resp <- req |>
-    httr2::req_verbose() |>
     httr2::req_perform(
       path = out_path
     )
@@ -60,6 +59,7 @@ geomet_wcs_query <- function(query, username = "", password = "",
       httr2::resp_content_type()
 
     if(resp_type != query[["FORMAT"]]){
+      # Return XML error page to user
       stop("Query returned error:\n", httr2::resp_body_xml(resp))
     }
   }

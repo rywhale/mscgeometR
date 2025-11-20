@@ -25,7 +25,7 @@ geomet_hydro_stns <- function(query) {
   # Check for/handle pagination
   parsed_req <- geomet_api_paginate(req)
 
-  dplyr::select(parsed_req, -c("links", "type"))
+  dplyr::select(parsed_req, -"type")
 }
 
 #' geomet_hydro_means
