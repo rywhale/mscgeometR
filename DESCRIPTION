@@ -1,7 +1,7 @@
 Package: mscgeometR
 Type: Package
 Title: R Wrapper for Querying the Meteorological Service of Canada’s (MSC) 'GeoMet' webservices
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Ryan", "Whaley", role = c("aut", "cre"), email = "rdgwhaley@gmail.com"))
 Description: R wrapper for querying the Meteorological Service of Canada’s (MSC) GeoMet webservices. Includes functionality for querying both 
   the GeoMet Web Coverage Service (WCS) as well as the OGC OpenAPI endpoint.
@@ -15,10 +15,10 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     dplyr,
-    httr,
+    httr2,
     jsonlite,
     purrr,
     tibble,
     vctrs,
     xml2
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

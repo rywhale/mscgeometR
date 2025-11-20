@@ -14,40 +14,39 @@ geomet_api_query <- function(endpoint = "https://api.weather.gc.ca/",
 
   query[["f"]] <- "json"
 
-  req_url <- httr::modify_url(endpoint, path = path)
+  req_url <- endpoint |>
+    httr2::url_modify(path = path)
 
-  res <- httr::GET(
-    req_url,
-    httr::user_agent("https://github.com/rywhale/mscgeometR"),
-    query = query
+  req <- req_url |>
+    utils::URLencode() |>
+    httr2::request() |>
+    httr2::req_url_query(!!!query)
+
+  resp <- req |>
+    httr2::req_perform()
+
+  httr2::resp_check_status(resp)
+
+  httr2::resp_check_content_type(
+    resp,
+    valid_types = c(
+      "application/json",
+      "application/schema",
+      "application/schema+json"
+      )
   )
-
-  # Check request content type
-  if (httr::http_type(res) != "application/json") {
-    stop("API did not return json", call. = FALSE)
-  }
 
   # Parse to json
-  parsed <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  # Check for request error
-  if (httr::http_error(res)) {
-    stop(
-      paste(
-        "GeoMet API request failed.",
-        httr::status_code(res),
-        parsed$message
-      )
+  parsed <- resp |>
+    httr2::resp_body_json(
+      simplifyVector = TRUE
     )
-  }
 
   structure(
     list(
       content = parsed,
       path = path,
-      response = res,
+      response = resp,
       query = query
     ),
     class = "geomet_api_resp"
@@ -81,7 +80,8 @@ geomet_api_paginate <- function(req, geometry = TRUE) {
   start_index <- req$content$numberReturned + 1
 
   while (start_index < req$content$numberMatched) {
-    query[["startindex"]] <- start_index
+
+    query[["offset"]] <- start_index
 
     query_req <- geomet_api_query(path = req$path, query = query)
 

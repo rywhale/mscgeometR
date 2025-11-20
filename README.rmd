@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 devtools::load_all()
 ```
 
-**Work in progress, contributions/input welcome**
+**Work in progress, breaking changes are possible! Contributions/input welcome**
 
 # mscgeometR
 
@@ -28,13 +28,13 @@ devtools::load_all()
   [![LICENSE](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
   <!-- badges: end -->
 
-R wrapper for querying the Meteorological Service of Canada's (MSC) [GeoMet webservices](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+R wrapper for querying the Meteorological Service of Canada's (MSC) [GeoMet webservices](https://eccc-msc.github.io/open-data/msc-geomet/readme_en/).
 
 Includes functionality for querying both the [GeoMet Web Coverage Service (WCS)](https://geo.weather.gc.ca/geomet?lang=en&service=WCS&version=2.0.1&request=GetCapabilities)
 as well as the [OGC OpenAPI endpoint](https://api.weather.gc.ca/openapi). 
 
 For more information on both services, please see the 
-[official documentation](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+[official documentation](https://eccc-msc.github.io/open-data/msc-geomet/readme_en/).
 
 ## Installation
 `mscgeometR` is not available on CRAN, you can install it from GitHub using `remotes`
@@ -48,13 +48,15 @@ Queries to the WCS endpoint require you to know the coverage ID of the layer
 you're after. You can get a full list of these IDs with `geomet_wcs_capabilities()`
 
 Setting the query parameters requires some familiarity with the product
-specification (e.g. resolution). Generally, specifying no "TIME" in the query
+specification (e.g. resolution). Generally, specifying no `TIME` in the query
 will lead to the most recent product being returned. 
+
+_NOTE: Per the documentation, if no resolution is set in these queries the data may be returned in an incorrect resolution so you should always set it_
 
 Once you have the coverage ID, you can query data like so
 
 ```{r wcs}
-library(raster)
+library(terra)
 
 # Downloads to temporary .tif file
 rdpa_file <- geomet_wcs_data(
@@ -64,7 +66,7 @@ rdpa_file <- geomet_wcs_data(
   query = list(
     "SUBSETTINGCRS" = "EPSG:4326",
     "OUTPUTCRS" = "EPSG:4326",
-    # Res
+    # Resolution
     "RESOLUTION" = "x(0.09)",
     "RESOLUTION" = "y(0.09)",
     # Bounding box
@@ -74,8 +76,8 @@ rdpa_file <- geomet_wcs_data(
   )
 )
 
-rdpa_rast <- raster(rdpa_file)
-raster::crs(rdpa_rast) <- raster::crs("EPSG:4326")
+rdpa_rast <- rast(rdpa_file)
+crs(rdpa_rast) <- crs("EPSG:4326")
 
 plot(rdpa_rast)
 ```

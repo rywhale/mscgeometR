@@ -12,9 +12,8 @@
 #' @keywords internal
 #'
 geomet_wcs_query <- function(query, username = "", password = "",
-                             end_point = "geomet", save_to_disk = FALSE){
-
-  if(!end_point %in% c("geomet", "geomet-climate")){
+                             end_point = "geomet", save_to_disk = FALSE) {
+  if (!end_point %in% c("geomet", "geomet-climate")) {
     stop("end_point must be 'geomet' or 'geomet-climate'")
   }
 
@@ -23,58 +22,53 @@ geomet_wcs_query <- function(query, username = "", password = "",
     "?lang=en&service=WCS&version=2.0.1"
   )
 
-  if(save_to_disk){
+  # Default to not saving on disk
+  out_path <- NULL
 
-    # Repeated query names get overwritten,
-    # add to URL manually instead
-    if("RESOLUTION" %in% names(query)){
-      base_url <- paste0(
-        base_url, "&RESOLUTION=",
-        query[names(query) == "RESOLUTION"][[1]],
-        "&RESOLUTION=",
-        query[names(query) == "RESOLUTION"][[2]]
-      )
-
-      query <- query[!names(query) == "RESOLUTION"]
-
-    }
-
-    if("SUBSET" %in% names(query)){
-      base_url <- paste0(
-        base_url, "&SUBSET=",
-        query[names(query) == "SUBSET"][[1]],
-        "&SUBSET=",
-        query[names(query) == "SUBSET"][[2]]
-      )
-
-      query <- query[!names(query) == "SUBSET"]
-
-    }
-
-    temp_path <- tempfile(pattern = "geomet-download", fileext = ".tiff")
-
-    httr::GET(
-      url = base_url,
-      query = query,
-      httr::write_disk(temp_path),
-      httr::authenticate(username, password)
+  if (save_to_disk) {
+    # Determine file extension
+    query_file_ext <- ifelse(
+      query[["FORMAT"]] == "image/tiff",
+      ".tiff",
+      ".nc"
     )
 
-    return(temp_path)
+    out_path <- tempfile(
+      pattern = "geomet-download",
+      fileext = query_file_ext
+    )
   }
 
-  res <- httr::GET(
-    url = base_url,
-    query = query,
-    httr::authenticate(username, password)
-  )
+  req <- base_url |>
+    utils::URLencode() |>
+    httr2::request() |>
+    httr2::req_url_query(!!!query) |>
+    httr2::req_auth_basic(username, password)
 
-  if(httr::status_code(res) != 200){
-    stop("Error in query: ", httr::status_code(res))
+  resp <- req |>
+    httr2::req_perform(
+      path = out_path
+    )
+
+  # Pass HTTP errors if encountered
+  httr2::resp_check_status(resp)
+
+  # Check for xml error page instead of data
+  if ("FORMAT" %in% names(query)) {
+    resp_type <- resp |>
+      httr2::resp_content_type()
+
+    if(resp_type != query[["FORMAT"]]){
+      # Return XML error page to user
+      stop("Query returned error:\n", httr2::resp_body_xml(resp))
+    }
   }
 
-  res
-
+  if (save_to_disk) {
+    out_path
+  } else {
+    resp
+  }
 }
 
 #' geomet_wcs_capabilities
@@ -84,8 +78,7 @@ geomet_wcs_query <- function(query, username = "", password = "",
 #' @return Vector of product identifiers
 #' @export
 #'
-geomet_wcs_capabilities <- function(end_point = "geomet"){
-
+geomet_wcs_capabilities <- function(end_point = "geomet") {
   res <- geomet_wcs_query(
     query = list(
       "request" = "GetCapabilities"
@@ -100,7 +93,7 @@ geomet_wcs_capabilities <- function(end_point = "geomet"){
 
   prod_list <- purrr::map(
     xml_tib$Capabilities[[5]],
-    ~{
+    ~ {
       .x["CoverageId"]
     }
   )
@@ -122,8 +115,7 @@ geomet_wcs_capabilities <- function(end_point = "geomet"){
 #' @return List of available bands for product
 #' @export
 #'
-geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geomet"){
-
+geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geomet") {
   desc <- geomet_wcs_query(
     query = list(
       "request" = "DescribeCoverage",
@@ -140,17 +132,18 @@ geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geome
   xml_bands <- xml2::xml_find_all(xml_cont, ".//swe:field")
 
   xml2::xml_attr(xml_bands, "name")
-
 }
 
 #' geomet_wcs_data
 #'
-#' @description Performs query for specified product and query parameters. Saves
-#'   output to temporary GeoTIFF file and returns file path.
-#'   Note that temporary files are deleted when the current R session ends.
+#' @description
+#' Performs query for specified product and query parameters and saves
+#' result to a temporary file. Defaults to `.tiff`format if no "FORMAT" entry
+#' is found in `query`.
+#' _Note that temporary files are deleted when the current R session ends._
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param query List of parameters to pass to query, see
-#' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}
+#' \href{https://eccc-msc.github.io/open-data/msc-geomet/wcs_en/}{ECCC Docs}
 #' @param username (Optional) Username for layers requiring authentication
 #' @param password (Optional) Password for layers requiring authentication
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
@@ -159,16 +152,21 @@ geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geome
 #'
 geomet_wcs_data <- function(coverage_id, query,
                             username = "", password = "",
-                            end_point = "geomet"){
-
-  if(missing(query)){
+                            end_point = "geomet") {
+  if (missing(query)) {
     warning("Querying without setting `query` parameters can lead to unexpected results.")
     query <- list()
   }
 
   query[["request"]] <- "GetCoverage"
   query[["COVERAGEID"]] <- coverage_id
-  query[["FORMAT"]] <- "image/tiff"
+
+  if (!"FORMAT" %in% names(query)) {
+    query[["FORMAT"]] <- "image/tiff"
+  }
+
+  # Geomet WCS only allows tiff and netcdf formats
+  stopifnot(query[["FORMAT"]] %in% c("image/tiff", "image/netcdf"))
 
   res <- geomet_wcs_query(
     query = query,
