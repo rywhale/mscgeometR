@@ -145,9 +145,11 @@ geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geome
 
 #' geomet_wcs_data
 #'
-#' @description Performs query for specified product and query parameters. Saves
-#'   output to temporary GeoTIFF file and returns file path.
-#'   Note that temporary files are deleted when the current R session ends.
+#' @description
+#' Performs query for specified product and query parameters and saves
+#' result to a temporary file. Defaults to `.tiff`format if no "FORMAT" entry
+#' is found in `query`.
+#' _Note that temporary files are deleted when the current R session ends._
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param query List of parameters to pass to query, see
 #' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}
@@ -168,7 +170,10 @@ geomet_wcs_data <- function(coverage_id, query,
 
   query[["request"]] <- "GetCoverage"
   query[["COVERAGEID"]] <- coverage_id
-  query[["FORMAT"]] <- "image/tiff"
+
+  if(!"FORMAT" %in% names(query)){
+    query[["FORMAT"]] <- "image/tiff"
+  }
 
   res <- geomet_wcs_query(
     query = query,
