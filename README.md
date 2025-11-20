@@ -14,7 +14,7 @@ welcome**
 
 R wrapper for querying the Meteorological Service of Canada’s (MSC)
 [GeoMet
-webservices](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+webservices](https://eccc-msc.github.io/open-data/msc-geomet/readme_en/).
 
 Includes functionality for querying both the [GeoMet Web Coverage
 Service
@@ -23,7 +23,7 @@ as well as the [OGC OpenAPI
 endpoint](https://api.weather.gc.ca/openapi).
 
 For more information on both services, please see the [official
-documentation](https://eccc-msc.github.io/open-data/msc-geomet/web-services_en).
+documentation](https://eccc-msc.github.io/open-data/msc-geomet/readme_en/).
 
 ## Installation
 
@@ -41,8 +41,12 @@ layer you’re after. You can get a full list of these IDs with
 `geomet_wcs_capabilities()`
 
 Setting the query parameters requires some familiarity with the product
-specification (e.g. resolution). Generally, specifying no “TIME” in the
+specification (e.g. resolution). Generally, specifying no `TIME` in the
 query will lead to the most recent product being returned.
+
+*NOTE: Per the documentation, if no resolution is set in these queries
+the data may be returned in an incorrect resolution so you should always
+set it*
 
 Once you have the coverage ID, you can query data like so
 
@@ -63,7 +67,7 @@ rdpa_file <- geomet_wcs_data(
   query = list(
     "SUBSETTINGCRS" = "EPSG:4326",
     "OUTPUTCRS" = "EPSG:4326",
-    # Res
+    # Resolution
     "RESOLUTION" = "x(0.09)",
     "RESOLUTION" = "y(0.09)",
     # Bounding box
