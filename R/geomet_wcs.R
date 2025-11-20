@@ -25,6 +25,13 @@ geomet_wcs_query <- function(query, username = "", password = "",
 
   if(save_to_disk){
 
+    # Determine file extension
+    query_file_ext <- ifelse(
+      query[["FORMAT"]] == "image/tiff",
+      ".tiff",
+      ".nc"
+    )
+
     # Repeated query names get overwritten,
     # add to URL manually instead
     if("RESOLUTION" %in% names(query)){
@@ -51,7 +58,7 @@ geomet_wcs_query <- function(query, username = "", password = "",
 
     }
 
-    temp_path <- tempfile(pattern = "geomet-download", fileext = ".tiff")
+    temp_path <- tempfile(pattern = "geomet-download", fileext = query_file_ext)
 
     httr::GET(
       url = base_url,
@@ -174,6 +181,9 @@ geomet_wcs_data <- function(coverage_id, query,
   if(!"FORMAT" %in% names(query)){
     query[["FORMAT"]] <- "image/tiff"
   }
+
+  # Geomet WCS only allows tiff and netcdf formats
+  stopifnot(query[["FORMAT"]] %in% c("image/tiff", "image/netcdf"))
 
   res <- geomet_wcs_query(
     query = query,
