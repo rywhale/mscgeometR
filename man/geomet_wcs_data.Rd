@@ -16,7 +16,7 @@ geomet_wcs_data(
 \item{coverage_id}{Product identifier, see `geomet_wcs_capabilities`}
 
 \item{query}{List of parameters to pass to query, see
-\href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}}
+\href{https://eccc-msc.github.io/open-data/msc-geomet/wcs_en/}{ECCC Docs}}
 
 \item{username}{(Optional) Username for layers requiring authentication}
 
@@ -28,7 +28,8 @@ geomet_wcs_data(
 Path to temporary file with results
 }
 \description{
-Performs query for specified product and query parameters. Saves
-  output to temporary GeoTIFF file and returns file path.
-  Note that temporary files are deleted when the current R session ends.
+Performs query for specified product and query parameters and saves
+result to a temporary file. Defaults to `.tiff`format if no "FORMAT" entry
+is found in `query`.
+_Note that temporary files are deleted when the current R session ends._
 }
