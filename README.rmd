@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 devtools::load_all()
 ```
 
-**Work in progress, contributions/input welcome**
+**Work in progress, breaking changes are possible! Contributions/input welcome**
 
 # mscgeometR
 
@@ -54,7 +54,7 @@ will lead to the most recent product being returned.
 Once you have the coverage ID, you can query data like so
 
 ```{r wcs}
-library(raster)
+library(terra)
 
 # Downloads to temporary .tif file
 rdpa_file <- geomet_wcs_data(
@@ -74,8 +74,8 @@ rdpa_file <- geomet_wcs_data(
   )
 )
 
-rdpa_rast <- raster(rdpa_file)
-raster::crs(rdpa_rast) <- raster::crs("EPSG:4326")
+rdpa_rast <- rast(rdpa_file)
+crs(rdpa_rast) <- crs("EPSG:4326")
 
 plot(rdpa_rast)
 ```
