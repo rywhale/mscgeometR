@@ -152,7 +152,7 @@ geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geome
 #' _Note that temporary files are deleted when the current R session ends._
 #' @param coverage_id Product identifier, see `geomet_wcs_capabilities`
 #' @param query List of parameters to pass to query, see
-#' \href{https://eccc-msc.github.io/open-data/msc-geomet/web-services_en/#web-coverage-service-wcs}{ECCC Docs}
+#' \href{https://eccc-msc.github.io/open-data/msc-geomet/wcs_en/}{ECCC Docs}
 #' @param username (Optional) Username for layers requiring authentication
 #' @param password (Optional) Password for layers requiring authentication
 #' @param end_point Either 'geomet' for weather products or 'geomet-climate'
