@@ -128,7 +128,8 @@ geomet_wcs_bands <- function(coverage_id, username, password, end_point = "geome
     end_point = end_point
   )
 
-  xml_cont <- httr::content(desc)
+  xml_cont <- desc |>
+    httr2::resp_body_xml()
 
   # Second with band names
   xml_bands <- xml2::xml_find_all(xml_cont, ".//swe:field")
