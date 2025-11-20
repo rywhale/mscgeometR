@@ -29,7 +29,7 @@ Path to temporary file with results
 }
 \description{
 Performs query for specified product and query parameters and saves
-result to a temporary file. Defaults to `.tiff`format if no "FORMAT" entry
-is found in `query`.
-_Note that temporary files are deleted when the current R session ends._
+result to a temporary file. Defaults to GeoTIFF format if no "FORMAT" entry
+is found in \code{query}.
+Note that temporary files are deleted when the current R session ends.
 }
