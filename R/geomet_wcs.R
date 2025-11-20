@@ -22,30 +22,6 @@ geomet_wcs_query <- function(query, username = "", password = "",
     "?lang=en&service=WCS&version=2.0.1"
   )
 
-  # Repeated query names get overwritten,
-  # add to URL manually instead
-  if ("RESOLUTION" %in% names(query)) {
-    base_url <- paste0(
-      base_url, "&RESOLUTION=",
-      query[names(query) == "RESOLUTION"][[1]],
-      "&RESOLUTION=",
-      query[names(query) == "RESOLUTION"][[2]]
-    )
-
-    query <- query[!names(query) == "RESOLUTION"]
-  }
-
-  if ("SUBSET" %in% names(query)) {
-    base_url <- paste0(
-      base_url, "&SUBSET=",
-      query[names(query) == "SUBSET"][[1]],
-      "&SUBSET=",
-      query[names(query) == "SUBSET"][[2]]
-    )
-
-    query <- query[!names(query) == "SUBSET"]
-  }
-
   # Default to not saving on disk
   out_path <- NULL
 
@@ -61,14 +37,6 @@ geomet_wcs_query <- function(query, username = "", password = "",
       pattern = "geomet-download",
       fileext = query_file_ext
     )
-
-    # httr::GET(
-    #   url = base_url,
-    #   query = query,
-    #   httr::write_disk(temp_path),
-    #   httr::authenticate(username, password)
-    # )
-    # return(temp_path)
   }
 
   req <- base_url |>
@@ -78,7 +46,7 @@ geomet_wcs_query <- function(query, username = "", password = "",
     httr2::req_auth_basic(username, password)
 
   resp <- req |>
-    # httr2::req_verbose() |>
+    httr2::req_verbose() |>
     httr2::req_perform(
       path = out_path
     )
@@ -95,16 +63,6 @@ geomet_wcs_query <- function(query, username = "", password = "",
       stop("Query returned error:\n", httr2::resp_body_xml(resp))
     }
   }
-
-  # res <- httr::GET(
-  #   url = base_url,
-  #   query = query,
-  #   httr::authenticate(username, password)
-  # )
-  #
-  #   if(httr::status_code(res) != 200){
-  #     stop("Error in query: ", httr::status_code(res))
-  #   }
 
   if (save_to_disk) {
     out_path
