@@ -8,7 +8,7 @@
 #' @param save_to_disk TRUE or FALSE, whether to write results to temporary file
 #' instead of returning response object. This can be useful for avoiding
 #' repeating large queries.
-#' @return `httr` response or path to file if `save_to_disk`
+#' @return `httr2` response or path to file if `save_to_disk`
 #' @keywords internal
 #'
 geomet_wcs_query <- function(query, username = "", password = "",
@@ -86,7 +86,9 @@ geomet_wcs_capabilities <- function(end_point = "geomet") {
     end_point = end_point
   )
 
-  xml_cont <- httr::content(res)
+  xml_cont <- res |>
+    httr2::resp_body_xml()
+
   xml_cont <- xml2::as_list(xml_cont)
 
   xml_tib <- tibble::as_tibble(xml_cont)

@@ -27,7 +27,7 @@ instead of returning response object. This can be useful for avoiding
 repeating large queries.}
 }
 \value{
-`httr` response or path to file if `save_to_disk`
+`httr2` response or path to file if `save_to_disk`
 }
 \description{
 Query ECCC GeoMet Web Coverage Service (WCS)
